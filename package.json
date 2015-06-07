@@ -1,0 +1,25 @@
+{
+  "name": "world-engine",
+  "version": "0.0.1",
+  "description": "Node wrapper for Terraform",
+  "main": "index.js",
+  "scripts": {
+    "install": "node install.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aaron T. Maturen",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/aaronmaturen/world-engine.git"
+  },
+  "dependencies": {
+    "adm-zip": "^0.4.7",
+    "mkdirp": "^0.5.1",
+    "progress": "^1.1.8",
+    "request": "^2.57.0",
+    "request-progress": "^0.3.1",
+    "rimraf": "^2.4.0",
+    "which": "^1.1.1"
+  }
+}
