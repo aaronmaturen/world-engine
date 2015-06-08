@@ -10,7 +10,7 @@ var AdmZip = require('adm-zip'),
     rimraf = require('rimraf'),
     which = require('which');
 
-var helper = require('./lib/terraform');
+var helper = require('./lib/environment');
 
 var cdnUrl = process.env.npm_config_terraform_cdnurl || process.env.TERRAFORM_CDNURL ||  'https://dl.bintray.com/mitchellh/terraform';
 var downloadUrl = helper.downloadUri(cdnUrl);
@@ -105,7 +105,7 @@ function extractTerraform(filepath) {
     return new Promise(function(resolve, reject) {
         try {
             var extractedpath = filepath + '-extract-' + Date.now();
-            console.log('extracting terraform from ' + filepath);
+            console.log('Extracting terraform from ' + filepath);
             var zip = new AdmZip(filepath);
             zip.extractAllTo(extractedpath, true);
             resolve(extractedpath);
@@ -147,24 +147,21 @@ function setPermissions(terraformPath) {
         fs.readdirSync(terraformPath).forEach(function(file) {
             fs.chmodSync(terraformPath + '/' + file, '0777');
         });
+        fs.readdirSync(__dirname + '/bin').forEach(function(file) {
+            fs.chmodSync(terraformPath + '/' + file, '0777');
+        });
         resolve(terraformPath);
     });
 }
 
 whichTerraform().then(function(path){
-    console.log(path);
+    return path;
 }).catch(function(error){
-    findSuitableTempDirectory()
+    return findSuitableTempDirectory()
         .then(getTerraformBinary)
         .then(extractTerraform)
         .then(clearDirectory)
         .then(copyIntoPlace)
         .then(setPermissions)
-        .then(console.log)
         .catch(console.error);
-});
-
-// (function(directory){
-//     console.log(directory);
-// });
-
+}).then(console.log);
